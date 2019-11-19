@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/a.out.dir/main.c.o CMakeFiles/a.out.dir/support/exception.c.o  -o a.out 

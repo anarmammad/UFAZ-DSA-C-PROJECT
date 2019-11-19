@@ -1,0 +1,3 @@
+/home/anarmammad/Desktop/UFAZ/DSaA2/Project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/anarmammad/Desktop/UFAZ/DSaA2/Project/cmake-build-debug/CMakeFiles/a.out.dir
+/home/anarmammad/Desktop/UFAZ/DSaA2/Project/cmake-build-debug/CMakeFiles/edit_cache.dir

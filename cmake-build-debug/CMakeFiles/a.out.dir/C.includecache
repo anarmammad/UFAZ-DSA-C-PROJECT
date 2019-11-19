@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/anarmammad/Desktop/UFAZ/DSaA2/Project/main.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+
