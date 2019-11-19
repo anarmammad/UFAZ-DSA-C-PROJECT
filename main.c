@@ -14,7 +14,7 @@ unsigned int FILE_SIZE, IMAGE_STARTS_AT;
 
 void throw_exception(char* body, short status_code){
     printf("%s\n", body);
-    printf("Exitting...");
+    printf("Exitting...\n");
     exit(status_code);
 }
 
@@ -53,7 +53,7 @@ void check_second_header(FILE* file){
 
 
 int main(int argc, char *argv[]){
-    FILE* file = fopen("../example.bmp", "rb+");
+    FILE* file = fopen("./example.bmp", "rb+");
     if(file == NULL)
         throw_exception("File cannot be found!", -1);
 
