@@ -14,25 +14,25 @@
 int main(int argc, char *argv[]){
     get_options(argc, argv);
 
-    // printf("Text to be written: %s\n", TEXT_TO_WRITE);
-    // printf("%s\n", IS_DATE_SET ? "Date will be written":"Date won't be written");
-    // printf("Position to put watermark: (%u, %u)\n", POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]);
-    // printf("Output file: %s\n", OUTPUT_FILE);
-    // printf("Color to be written: "); print_color(&COLOR_TO_WRITE);
+    printf("Text to be written: %s\n", TEXT_TO_WRITE);
+    printf("%s\n", IS_DATE_SET ? "Date will be written":"Date won't be written");
+    printf("Position to put watermark: (%u, %u)\n", POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]);
+    printf("Output file: %s\n", OUTPUT_FILE);
+    printf("Color to be written: "); print_color(&COLOR_TO_WRITE);
 
-    printf("%s", get_linux_date());
 
     BMP* bmp_image = open_bmp(FILENAME);
 
-    // read_first_header(bmp_image);
-    // printf("Image starts at: %u\n", bmp_image->image_starts_at);
-    // printf("File size is: %u\n", bmp_image->filesize);
+    printf("\n\n**********\n\n");
+    read_first_header(bmp_image);
+    printf("Image starts at: %u\n", bmp_image->image_starts_at);
+    printf("File size is: %u\n", bmp_image->filesize);
 
-    // read_second_header(bmp_image);
-    // printf("Header size is: %u\n", bmp_image->header_size);
-    // printf("Image width is: %u\n", bmp_image->image_width);
-    // printf("Image height is: %u\n", bmp_image->image_height);
-    // printf("Number of color planes is: %u\n", bmp_image->n_color_planes);
-    // printf("Bits per pixel is: %u\n", bmp_image->bits_per_pixel);
+    read_second_header(bmp_image);
+    printf("Header size is: %u\n", bmp_image->header_size);
+    printf("Image width is: %u\n", bmp_image->image_width);
+    printf("Image height is: %u\n", bmp_image->image_height);
+    printf("Number of color planes is: %u\n", bmp_image->n_color_planes);
+    printf("Bits per pixel is: %u\n", bmp_image->bits_per_pixel);
     return 0;
 }

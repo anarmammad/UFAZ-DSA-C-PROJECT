@@ -1,6 +1,6 @@
 #include "helper.h"
 
-char FILENAME[100], TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "stdin", ERROR_BUF[100];
+char FILENAME[100], TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "stdout", ERROR_BUF[100];
 
 unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } from left to right and from bottom to top
 
@@ -67,7 +67,7 @@ char* get_linux_date(){
     int pipedes[2];
     char* string_date = (char*) malloc(50);
 
-    if (pipe(pipedes)==-1)
+    if (pipe(pipedes) == -1)
         throw_exception("Pipe error", -10);
 
 
