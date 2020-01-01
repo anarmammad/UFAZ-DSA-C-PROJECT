@@ -78,21 +78,21 @@ char* morse_encode_char(char ch) {
             return "11101110111011101"; // ----.
         // symbols /* NOT READY */
         case '.':
-            return ""; // • − • − • −
+            return "10111010111010111"; // • − • − • −
         case ',':
-            return ""; // − − • • − −
+            return "1110111010101110111"; // − − • • − −
         case ':':
-            return ""; // − − − • • •	
+            return "11101110111010101"; // − − − • • •	
         case '?':
-            return ""; // • • − − • •
+            return "101011101110101"; // • • − − • •
         case '\'':
-            return ""; // • − − − − •
+            return "1011101110111011101"; // • − − − − •
         case '-':
-            return ""; // − • • • • −	
+            return "111010101010111"; // − • • • • −	
         case '+':
-            return ""; // • − • − •
+            return "1011101011101"; // • − • − •
         case '=':
-            return ""; // − • • • −
+            return "1110101010111"; // − • • • −
     } 
     return "00000"; // space 
 } 
