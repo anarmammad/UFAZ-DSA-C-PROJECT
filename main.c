@@ -3,66 +3,77 @@
 //
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#define true 1
-#define false 0
-typedef int boolean;
+#include "bmp.h"
+#include "helper.h"
+#include "morse.h"
 
-unsigned int FILE_SIZE, IMAGE_STARTS_AT;
+char FILENAME[100] = "example.bmp", TEXT_TO_WRITE[100],  OUTPUT_FILE[100];
+int IS_DATE_SET = false;
 
-void throw_exception(char* body, short status_code){
-    printf("%s\n", body);
-    printf("Exitting...\n");
-    exit(status_code);
+
+void prepare_options(int argc, char *argv[]){
+    static struct option longopts[] = {
+        { "text", required_argument, NULL, 't' },
+        { "date", no_argument, NULL, 'd' },
+        { "pos", required_argument, NULL, 'p' },
+        { "o", required_argument, NULL, 'o' },
+        { "color", required_argument, NULL, 'c'},
+        { 0,         0,           0, 0 }
+    };
+    char ch;
+    while ((ch = getopt_long_only(argc, argv, ":td:p:o:", longopts, NULL)) != -1) {
+        switch (ch) {
+            case 't':
+                strcpy(TEXT_TO_WRITE, optarg);
+                printf("Text: %s\n", TEXT_TO_WRITE);
+                break;
+            case 'd':
+                IS_DATE_SET = true;
+                printf("Date will be written!\n");
+                break;
+            case 'p':
+                printf("Position: (%s)\n", optarg);
+                break;
+            case 'o':
+                strcpy(OUTPUT_FILE, optarg);
+                printf("Output file: %s\n", optarg);
+                break;
+            case 'c':
+                // COLOR 
+                printf("Color: %s\n", optarg);
+                break;
+            case ':':
+                sprintf(ERROR_BUF, "Option '%s' has missing argument", argv[optind - 1]);
+                throw_exception(ERROR_BUF, -5);
+                break;
+            case '?':
+                if (optopt == 0) 
+                    sprintf(ERROR_BUF, "Unknown option '%s'", argv[optind - 1]);
+                else 
+                    sprintf(ERROR_BUF, "Error parsing option '%s'", argv[optind - 1]);
+
+                throw_exception(ERROR_BUF, -6);
+                break;
+        }
+    }
 }
-
-void check_first_header(FILE* file){
-    unsigned char first_header[14];
-
-    fgets((char*)first_header, 14, file);
-
-    // 2 first bytes: BMP format
-    if(strncmp((char*)first_header, "BM", 2) != 0)
-        throw_exception("Invalid first header: unknown format!", -2);
-
-    // 4 next bytes: file size
-    // TODO: get file size directly from linux libraries and check with the one in the header
-    FILE_SIZE = first_header[2] +
-            (first_header[3] << (unsigned) 8) +
-            (first_header[4] << (unsigned) 16) +
-            (first_header[5] << (unsigned) 24);
-    if(FILE_SIZE == 0)
-        throw_exception("Invalid first header: file size is wrong!", -3);
-
-    // 4 next bytes: reserved for application. Not used.
-    // 4 next bytes: the offset - byte the image starts
-    IMAGE_STARTS_AT = first_header[10] +
-                (first_header[11] << (unsigned) 8) +
-                (first_header[12] << (unsigned) 16) +
-                (first_header[13] << (unsigned) 24);
-    if(IMAGE_STARTS_AT == 0 || IMAGE_STARTS_AT >= FILE_SIZE)
-        throw_exception("Invalid first header: image start offset is wrong!", -4);
-}
-
-void check_second_header(FILE* file){
-    /**/
-}
-
 
 
 int main(int argc, char *argv[]){
-    FILE* file = fopen("./example.bmp", "rb+");
-    if(file == NULL)
-        throw_exception("File cannot be found!", -1);
+    prepare_options(argc, argv);
 
-    check_first_header(file);
-    printf("%x \n", fgetc(file));
-    printf("%x \n", fgetc(file));
-    printf("%x \n", fgetc(file));
-    printf("%x \n", fgetc(file));
+    BMP* bmp_image = open_bmp("example.bmp");
 
-    fclose(file);
+    read_first_header(bmp_image);
+    printf("Image starts at: %u\n", bmp_image->image_starts_at);
+    printf("File size is: %u\n", bmp_image->filesize);
+
+    read_second_header(bmp_image);
+    printf("Header size is: %u\n", bmp_image->header_size);
+    printf("Image width is: %u\n", bmp_image->image_width);
+    printf("Image height is: %u\n", bmp_image->image_height);
+    printf("Number of color planes is: %u\n", bmp_image->n_color_planes);
+    printf("Bits per pixel is: %u\n", bmp_image->bits_per_pixel);
     return 0;
 }

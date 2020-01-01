@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "morse.h": "c",
+        "bmp.h": "c",
+        "stdio.h": "c",
+        "helper.h": "c"
+    }
+}
