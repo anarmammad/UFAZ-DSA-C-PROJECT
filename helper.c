@@ -61,3 +61,32 @@ void get_options(int argc, char *argv[]){
         }
     }
 }
+
+
+char* get_linux_date(){
+    int pipedes[2];
+    char* string_date = (char*) malloc(50);
+
+    if (pipe(pipedes)==-1)
+        throw_exception("Pipe error", -10);
+
+
+    pid_t f_pid = fork();
+    if ( f_pid == -1)
+        throw_exception("Fork error", -11);
+
+    if(f_pid == 0) { // child process
+        dup2 (pipedes[1], STDOUT_FILENO);
+        close(pipedes[0]);
+        close(pipedes[1]);
+        execl("/bin/date", "date", NULL);
+        exit(0);
+    } 
+    else { // parent process
+        close(pipedes[1]);
+        int nbytes = read(pipedes[0], string_date, 50);
+        string_date[nbytes - 1] = '\0'; // (nbytes - 1) is line feed which is present in output of linux command
+        wait(NULL);
+    }
+    return string_date;
+}

@@ -9,6 +9,9 @@ typedef int bool;
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
 #include "color.h"
 #include "pixel.h"
 
@@ -24,6 +27,7 @@ extern Color COLOR_TO_WRITE;
 
 void throw_exception(char* body, short status_code);
 void get_options(int argc, char *argv[]);
+char* get_linux_date();
 
 
 #endif // __HELPER_H__

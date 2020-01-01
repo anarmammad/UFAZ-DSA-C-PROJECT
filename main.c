@@ -10,14 +10,17 @@
 
 
 
+
 int main(int argc, char *argv[]){
     get_options(argc, argv);
 
-    printf("Text to be written: %s\n", TEXT_TO_WRITE);
-    printf("%s\n", IS_DATE_SET ? "Date will be written":"Date won't be written");
-    printf("Position to put watermark: (%u, %u)\n", POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]);
-    printf("Output file: %s\n", OUTPUT_FILE);
-    printf("Color to be written: "); print_color(&COLOR_TO_WRITE);
+    // printf("Text to be written: %s\n", TEXT_TO_WRITE);
+    // printf("%s\n", IS_DATE_SET ? "Date will be written":"Date won't be written");
+    // printf("Position to put watermark: (%u, %u)\n", POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]);
+    // printf("Output file: %s\n", OUTPUT_FILE);
+    // printf("Color to be written: "); print_color(&COLOR_TO_WRITE);
+
+    printf("%s", get_linux_date());
 
     BMP* bmp_image = open_bmp(FILENAME);
 
