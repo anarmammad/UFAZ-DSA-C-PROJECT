@@ -4,15 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define BLACK { 0, 0, 0, 0 }
+#define WHITE { 255, 255, 255, 0 }
+
 typedef struct {
-    unsigned int red;
+    unsigned char red;
     unsigned char green;
     unsigned char blue;
     unsigned char alpha_channel;
 } Color;
-
-extern Color BLACK;
-extern Color WHITE;
 
 Color* new_color(
     unsigned char red, 

@@ -13,11 +13,3 @@ void print_pixel(Pixel* pixel){
     printf("Coordinate: (x: %u, y: %u)\t Color: ", pixel->x, pixel->y);
     print_color(pixel->color);
 }
-
-int main(int argc, char const *argv[]){
-    Color* red = new_color(255, 0, 0, 0);
-
-    Pixel* pixel = new_pixel(1, 1, red);
-    print_pixel(pixel);
-    return 0;
-}

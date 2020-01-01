@@ -3,8 +3,10 @@
 BMP* open_bmp(char* filename){
     BMP* bmp_image = (BMP*) malloc(sizeof(BMP));
     bmp_image->file = fopen(filename, "rb+");
-    if( ! bmp_image->file )
-        throw_exception("File not found or cannot be read!", -5);
+    if( ! bmp_image->file ){
+        sprintf(ERROR_BUF, "File '%s' not found or cannot be read!", filename);
+        throw_exception(ERROR_BUF, -5);
+    }
 
     return bmp_image;
 }

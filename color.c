@@ -1,7 +1,5 @@
 #include "color.h"
 
-Color BLACK = {0, 0, 0, 0};
-Color WHITE = {255, 255, 255, 0};
 
 Color* new_color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha_channel){
     Color* new_color = (Color*) malloc(sizeof(Color));
