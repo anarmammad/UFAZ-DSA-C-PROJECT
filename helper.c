@@ -2,7 +2,7 @@
 
 char FILENAME[100], TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "stdout", ERROR_BUF[100];
 
-unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } from left to right and from bottom to top
+unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } starting from the top left of the image
 
 bool IS_DATE_SET = false;
 
