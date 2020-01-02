@@ -87,6 +87,7 @@ char* get_linux_date(){
         close(pipedes[1]);
         int nbytes = read(pipedes[0], string_date, 50);
         string_date[nbytes - 1] = '\0'; // (nbytes - 1) is line feed which is present in output of linux command
+        close(pipedes[0]);
         wait(NULL);
     }
     return string_date;
