@@ -8,6 +8,7 @@ typedef int bool;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <getopt.h>
 #include <unistd.h>
 #include <sys/wait.h>

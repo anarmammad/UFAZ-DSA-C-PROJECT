@@ -2,7 +2,7 @@
 
 char FILENAME[100], TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "stdout", ERROR_BUF[100];
 
-unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } from left to right and from bottom to top
+unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } starting from the top left of the image
 
 bool IS_DATE_SET = false;
 
@@ -31,7 +31,8 @@ void get_options(int argc, char *argv[]){
     while ((ch = getopt_long_only(argc, argv, ":td:p:o:", longopts, NULL)) != -1) {
         switch (ch) {
             case 't':
-                strcpy(TEXT_TO_WRITE, optarg);
+                for(int i = 0; optarg[i]; i++)
+                    TEXT_TO_WRITE[i] = tolower(optarg[i]);
                 break;
             case 'd':
                 IS_DATE_SET = true;
@@ -86,6 +87,7 @@ char* get_linux_date(){
         close(pipedes[1]);
         int nbytes = read(pipedes[0], string_date, 50);
         string_date[nbytes - 1] = '\0'; // (nbytes - 1) is line feed which is present in output of linux command
+        close(pipedes[0]);
         wait(NULL);
     }
     return string_date;
