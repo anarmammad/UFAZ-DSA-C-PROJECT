@@ -76,7 +76,7 @@ char* morse_encode_char(char ch) {
             return "111011101110101"; // ---..
         case '9':
             return "11101110111011101"; // ----.
-        // symbols /* NOT READY */
+        // symbols 
         case '.':
             return "10111010111010111"; // • − • − • −
         case ',':
