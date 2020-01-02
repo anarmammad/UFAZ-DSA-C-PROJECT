@@ -12,28 +12,24 @@ BMP* open_bmp(char* filename){
 }
 
 BMP* read_first_header(BMP* bmp_image){
-    unsigned char first_header[15]; // extra byte allocated for \0 at the end 
-    fgets((char*) first_header, 15, bmp_image->file);
 
     // 2 first bytes: BMP format
-    if(strncmp((char*)first_header, "BM", 2) != 0)
+    unsigned char BM[2];
+    fread(BM, 2, 1, bmp_image->file);
+    if(strncmp((char*)BM, "BM", 2) != 0)
         throw_exception("Invalid first header: unknown format!", -2);
 
     // 4 next bytes: file size
-    bmp_image->filesize = first_header[2] +
-            (first_header[3] << (unsigned) 8) +
-            (first_header[4] << (unsigned) 16) +
-            (first_header[5] << (unsigned) 24);
+    fread(&bmp_image->filesize, 4, 1, bmp_image->file);
     if(bmp_image->filesize == 0)
         throw_exception("Invalid first header: file size is wrong!", -3);
 
     // 4 next bytes: reserved for application. Not used
+    int junk;
+    fread(&junk, 4, 1, bmp_image->file);
 
     // 4 next bytes: the offset - byte the image starts
-    bmp_image->image_starts_at = first_header[10] +
-                    (first_header[11] << (unsigned) 8) +
-                    (first_header[12] << (unsigned) 16) +
-                    (first_header[13] << (unsigned) 24);
+    fread(&bmp_image->image_starts_at, 4, 1, bmp_image->file);
     if(bmp_image->image_starts_at == 0 || bmp_image->image_starts_at >= bmp_image->filesize)
         throw_exception("Invalid first header: image start offset is wrong!", -4);
 
@@ -41,34 +37,25 @@ BMP* read_first_header(BMP* bmp_image){
 }
 
 BMP* read_second_header(BMP* bmp_image){
-    unsigned char second_header[57]; // extra byte allocated for \0 at the end 
-    fgets((char*)second_header, 57, bmp_image->file);
-
-    // 4 Bytes in little endian : size of the header
-    bmp_image->header_size = second_header[0] +
-                (second_header[1] << (unsigned) 8) +
-                (second_header[2] << (unsigned) 16) +
-                (second_header[3] << (unsigned) 24);
+    
+    // 4 Bytes in little endian : size of the header starting counting from this point
+    fread(&bmp_image->header_size, 4, 1, bmp_image->file);
 
     // 4 Bytes in little endian for image width
-    bmp_image->image_width = second_header[4] +
-                (second_header[5] << (unsigned) 8) +
-                (second_header[6] << (unsigned) 16) +
-                (second_header[7] << (unsigned) 24);
+    fread(&bmp_image->image_width, 4, 1, bmp_image->file);
 
     // 4 Bytes in little endian for image height
-    bmp_image->image_height = second_header[8] +
-                (second_header[9] << (unsigned) 8) +
-                (second_header[10] << (unsigned) 16) +
-                (second_header[11] << (unsigned) 24);
+    fread(&bmp_image->image_height, 4, 1, bmp_image->file);
 
     // 2 Bytes : number of color planes
-    bmp_image->n_color_planes = second_header[12] + (second_header[13] << 8);
+    fread(&bmp_image->n_color_planes, 2, 1, bmp_image->file);
 
     // 2 Bytes : number of bits per pixels
-    bmp_image->bits_per_pixel = second_header[14] + (second_header[15] << 8);
+    fread(&bmp_image->bits_per_pixel, 2, 1, bmp_image->file);
     
-    // 24 remaining Bytes : not important
-            
+    // remaining Bytes : not important ( size can be different )
+    char junk[bmp_image->header_size - 16];
+    fread(&junk, bmp_image->header_size - 16, 1, bmp_image->file);
+
     return bmp_image;
 }
