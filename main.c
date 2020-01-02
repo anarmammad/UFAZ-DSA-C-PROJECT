@@ -35,7 +35,6 @@ int main(int argc, char *argv[]){
 //    printf("Image height is: %u\n", bmp_image->image_height);
 //    printf("Number of color planes is: %u\n", bmp_image->n_color_planes);
 //    printf("Bits per pixel is: %u\n", bmp_image->bits_per_pixel);
-
     PBMP file = open_bmp("/home/harry/example.bmp");
 
     printf("BMP:\n"
@@ -43,11 +42,15 @@ int main(int argc, char *argv[]){
            "\tDataOffset: %d\n"
            "\tSize: %d\n"
            "\tWidth: %d\n"
-           "\tHeight: %d\n",
+           "\tHeight: %d\n"
+           "\tBits per pixel: %d\n",
            file->Header.FileSize,
            file->Header.DataOffset,
            file->InfoHeader.Size,
            file->InfoHeader.Width,
-           file->InfoHeader.Height);
+           file->InfoHeader.Height,
+           file->InfoHeader.Planes);
+
+    //close_bmp(file);
     return 0;
 }

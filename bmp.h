@@ -33,5 +33,6 @@ typedef struct __attribute__((__packed__)) {
 } BMP, *PBMP;
 
 PBMP open_bmp(char* filename);
+void close_bmp(PBMP);
 
 #endif // __BMP_H__
