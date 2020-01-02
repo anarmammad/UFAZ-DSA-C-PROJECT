@@ -6,20 +6,33 @@
 #include <stdlib.h>
 #include "helper.h"
 
-typedef struct{
+typedef struct __attribute__((__packed__)) {
+    struct __attribute__((__packed__)) {
+        char Signature[2];
+        int FileSize;
+        int reserved;
+        int DataOffset;
+    } Header;
+
+    struct {
+        int Size;
+        int Width;
+        int Height;
+        short Planes;
+        short Bits;
+        int Compression;
+        int ImageSize;
+        int XpixelsPerM;
+        int YpixelsPerM;
+        int ColorsUsed;
+        int ImportantColors;
+    } InfoHeader;
+
     FILE* file;
-    unsigned filesize; // 4 bytes
-    unsigned image_starts_at; // 4 bytes
-    unsigned header_size; // 4 bytes
-    unsigned image_width; // 4 bytes
-    unsigned image_height; // 4 bytes
-    unsigned short n_color_planes; // 2 bytes
-    unsigned short bits_per_pixel; // 2 bytes
-} BMP;
 
-BMP* open_bmp(char* filename);
+} BMP, *PBMP;
 
-BMP* read_first_header(BMP* bmp_image);
-BMP* read_second_header(BMP* bmp_image);
+PBMP open_bmp(char* filename);
+void close_bmp(PBMP);
 
 #endif // __BMP_H__

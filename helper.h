@@ -16,6 +16,11 @@ typedef int bool;
 #include "color.h"
 #include "pixel.h"
 
+#define ERR_FILE -1
+#define ERR_FORMAT -2
+#define ERR_SIZE -3
+#define ERR_UNKNOWN -4
+
 extern char FILENAME[100], TEXT_TO_WRITE[100],  OUTPUT_FILE[100], ERROR_BUF[100];
 
 extern unsigned POSITION_TO_WRITE[2];
