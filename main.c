@@ -3,35 +3,40 @@
 //
 
 #include <stdio.h>
-#include <stddef.h>
 
 #include "bmp.h"
 #include "helper.h"
-#include "morse.h"
 #include "pixel.h"
-
-
 
 
 int main(int argc, char *argv[]){
     get_options(argc, argv);
 
-    printf("Text to be written: %s\n", TEXT_TO_WRITE);
-    printf("%s\n", IS_DATE_SET ? "Date will be written":"Date won't be written");
-    printf("Position to put watermark: (%u, %u)\n", POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]);
-    printf("Output file: %s\n", OUTPUT_FILE);
-    printf("Color to be written: "); print_color(&COLOR_TO_WRITE);
+    sprintf(LOG_BUFF, "OPTIONS:\n"
+        "\tFile name: %s\n"
+        "\t%s\n"
+        "\tFull text to be written: %s\n"
+        "\tPosition to put watermark: (%u, %u)\n"
+        "\tOutput file: %s\n"
+        "\tColor to be written: %s\n",
+        FILENAME,
+        IS_DATE_SET ? "Date will be written!":"Date won't be written!",
+        TEXT_TO_WRITE,
+        POSITION_TO_WRITE[0], POSITION_TO_WRITE[1],
+        OUTPUT_FILE,
+        color_to_rgba(&COLOR_TO_WRITE));
 
-    printf("\n\n**********\n\n");
+    str_logger(LOG_BUFF); 
 
     PBMP bmp_image = open_bmp(FILENAME);
-    printf("BMP:\n"
-           "\tFileSize: %d\n"
-           "\tImage starts at: %d\n"
-           "\tSize: %d\n"
-           "\tImage Width: %d\n"
-           "\tImage Height: %d\n"
-           "\t# Color planes: %d\n"
+
+    sprintf(LOG_BUFF, "BMP:\n"
+           "\tSize of the file: %d bytes\n"
+           "\tImage offset: %d bytes\n"
+           "\tSize of the DIB header: %d bytes\n"
+           "\tImage Width: %d pixels\n"
+           "\tImage Height: %d pixels\n"
+           "\tNumber of color planes: %d\n"
            "\tBits per pixel: %d\n",
            bmp_image->header.filesize,
            bmp_image->header.image_starts_at,
@@ -41,39 +46,18 @@ int main(int argc, char *argv[]){
            bmp_image->info_header.n_color_planes,
            bmp_image->info_header.bits_per_pixel);
 
+    str_logger(LOG_BUFF); 
 
-    printf("\n\n**********\n\n");
+    char* morse_txt = watermark_bmp(bmp_image);
 
+    sprintf(LOG_BUFF, "WATERMARK:\n"
+        "\tPosition offset: %u bytes\n"
+        "\tLength of morse encoded text: %lu pixels\n",
+        get_offset(bmp_image, POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]),
+        strlen(morse_txt));        
+    str_logger(LOG_BUFF);
 
-    /* DRAFT */
-
-    unsigned offset = get_offset(bmp_image, POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]); 
-
-    FILE* mod_file = fopen(OUTPUT_FILE, "wb+");
-    char* morse_txt = str_to_morse(TEXT_TO_WRITE);
-    rewind(bmp_image->file);
-   
-    char* data = (char*) malloc(bmp_image->header.filesize);
-
-    fread(data, offset, 1, bmp_image->file);
-    fwrite(data, offset, 1, mod_file);
-
-    fread(data, strlen(morse_txt) * (bmp_image->info_header.bits_per_pixel / 8), 1, bmp_image->file);
-    for (int i = 0; morse_txt[i]; i++){
-        if(morse_txt[i] == '1'){
-            fwrite(bmp_image->info_header.bits_per_pixel == 32 ? (char*)&COLOR_TO_WRITE:(((char*) &COLOR_TO_WRITE)+1) , bmp_image->info_header.bits_per_pixel / 8, 1, mod_file);
-        }
-        else{
-            fwrite(&data[i * bmp_image->info_header.bits_per_pixel / 8], bmp_image->info_header.bits_per_pixel / 8, 1, mod_file);
-        }
-    }
-    
-    
-    fread(data, bmp_image->header.filesize - strlen(morse_txt) * (bmp_image->info_header.bits_per_pixel / 8) - offset, 1, bmp_image->file);
-    fwrite(data, bmp_image->header.filesize - strlen(morse_txt) * (bmp_image->info_header.bits_per_pixel / 8) - offset, 1, mod_file);
-
-    fclose(mod_file);
-
+    str_logger("******************************************\n");
     close_bmp(bmp_image);
     return 0;
 }

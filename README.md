@@ -2,5 +2,5 @@
 
 Usage:
 
-1. make
-2. run: `./a.out example.bmp -text "Hello" -date -color FFFFFE -pos 10,20 -o modexample.bmp`
+1. run: `sudo make`
+2. run: `wm example.bmp -text "Hello" -date -color FFFFFE -pos 10,20 -o modexample.bmp`

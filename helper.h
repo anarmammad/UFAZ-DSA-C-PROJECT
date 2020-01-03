@@ -20,7 +20,7 @@ typedef int bool;
 #define ERR_SIZE -3
 #define ERR_UNKNOWN -4
 
-extern char FILENAME[100], TEXT_TO_WRITE[100],  OUTPUT_FILE[100], ERROR_BUF[100];
+extern char FILENAME[100], TEXT_TO_WRITE[100],  OUTPUT_FILE[100], ERROR_BUFF[100], LOG_BUFF[200];
 
 extern unsigned POSITION_TO_WRITE[2];
 
@@ -33,6 +33,9 @@ extern Color COLOR_TO_WRITE;
 void throw_exception(char* body, short status_code);
 void get_options(int argc, char *argv[]);
 char* get_linux_date();
+
+void print_man_page_and_exit();
+void str_logger(char* str);
 
 
 #endif // __HELPER_H__

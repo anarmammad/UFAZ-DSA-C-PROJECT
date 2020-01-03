@@ -1,16 +1,8 @@
 #include "color.h"
 
 
-Color* new_color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha_channel){
-    Color* new_color = (Color*) malloc(sizeof(Color));
-    new_color->red = red;
-    new_color->green = green;
-    new_color->blue = blue;
-    new_color->alpha_channel = alpha_channel;
-
-    return new_color;
-}
-
-void print_color(Color* color){
-    printf("(r: %hhu, g: %hhu, b: %hhu, a: %hhu)\n", color->red, color->green, color->blue, color->alpha_channel);
+char* color_to_rgba(Color* color){
+    char* ptr = (char*) calloc(200, 1);
+    sprintf(ptr, "(r: %hhu, g: %hhu, b: %hhu, a: %hhu)", color->red, color->green, color->blue, color->alpha_channel);
+    return ptr;
 }

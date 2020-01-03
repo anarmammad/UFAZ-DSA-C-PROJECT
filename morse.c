@@ -98,7 +98,7 @@ char* morse_encode_char(char ch) {
 } 
 
 char* str_to_morse(char* str){
-    char* output = (char*) malloc(2000); 
+    char* output = (char*) calloc(5000, 1); 
     char code[20];
     for (int i = 0; str[i]; i++){
         strcpy(code, morse_encode_char(str[i]));

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "helper.h"
+#include "morse.h"
 
 typedef struct __attribute__((__packed__)) {
     struct __attribute__((__packed__)) { // 14 bytes
@@ -15,12 +16,13 @@ typedef struct __attribute__((__packed__)) {
     } header;
 
     struct { // 40 bytes
+        /* 16 bytes */
         int header_size;
         int image_width;
         int image_height;
         short n_color_planes;
         short bits_per_pixel;
-        /* not important */
+        /* 40 bytes: not important */
         int compression;
         int image_size;
         int x_pixel_per_m;
@@ -34,6 +36,7 @@ typedef struct __attribute__((__packed__)) {
 } BMP, *PBMP;
 
 PBMP open_bmp(char* filename);
+char* watermark_bmp(PBMP image_old);
 void close_bmp(PBMP);
 
 #endif // __BMP_H__

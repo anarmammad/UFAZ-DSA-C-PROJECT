@@ -1,0 +1,46 @@
+OPTIONS:
+	File name: example.bmp
+	Date won't be written!
+	Text to be written: sos
+	Position to put watermark: (0, 0)
+	Output file: modexample.bmp
+	Color to be written: (r: 0, g: 0, b: 0, a: 0)
+
+BMP:
+	Size of the file: 1228872 bytes
+	Image offset: 70 bytes
+	Size of the DIB header: 56 bytes
+	Image Width: 640 pixels
+	Image Height: 480 pixels
+	Number of color planes: 1
+	Bits per pixel: 32
+
+WATERMARK:
+	Position offset: 1226310 bytes
+	Length of morse encoded text: 27 pixels
+
+******************************************
+
+OPTIONS:
+	File name: example.bmp
+	Date won't be written!
+	Text to be written: sos
+	Position to put watermark: (0, 0)
+	Output file: modexample.bmp
+	Color to be written: (r: 0, g: 0, b: 0, a: 0)
+
+BMP:
+	Size of the file: 1228872 bytes
+	Image offset: 70 bytes
+	Size of the DIB header: 56 bytes
+	Image Width: 640 pixels
+	Image Height: 480 pixels
+	Number of color planes: 1
+	Bits per pixel: 32
+
+WATERMARK:
+	Position offset: 1226310 bytes
+	Length of morse encoded text: 27 pixels
+
+******************************************
+

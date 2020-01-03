@@ -1,7 +1,7 @@
 #include "pixel.h"
 
 Pixel* new_pixel(unsigned x, unsigned y, Color* color){
-    Pixel* new_pixel = (Pixel*) malloc(sizeof(Pixel));
+    Pixel* new_pixel = (Pixel*) calloc(sizeof(Pixel), 1);
     new_pixel->x = x;
     new_pixel->y = y;
     new_pixel->color = color;
@@ -9,9 +9,10 @@ Pixel* new_pixel(unsigned x, unsigned y, Color* color){
     return new_pixel;
 }
 
-void print_pixel(Pixel* pixel){
-    printf("Coordinate: (x: %u, y: %u)\t Color: ", pixel->x, pixel->y);
-    print_color(pixel->color);
+char* pixel_to_string(Pixel* pixel){
+    char* ptr;
+    sprintf(ptr, "Coordinate: (x: %u, y: %u)\t Color: %s\n", pixel->x, pixel->y, color_to_rgba(pixel->color));
+    return ptr;
 }
 
 unsigned get_offset(BMP* bmp_image, unsigned x, unsigned y){

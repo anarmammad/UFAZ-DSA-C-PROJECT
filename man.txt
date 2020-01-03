@@ -1,0 +1,29 @@
+
+Simple watermarking of BMP images
+
+Usage:  wm [FILE] [OPTIONS] 
+
+EXAMPLE:    wm image.bmp -text "Hello" -date -color FFFFFE -pos 10,20 -o modimage.bmp
+
+Options:
+
+    -text       Specifies th text which will be written in morse 
+                code. If it is not present, text won't be written.
+    
+    -date       The output of system command date after the text 
+                will be written in morse code if option -text is
+                present. If it is not present, date won't be written.
+
+    -color      Specifies the HEX value of color in which the 
+                watermarking will be done. If it is not present 
+                BLACK #000000 color will be used by default.
+
+    -pos        The morse code will be written at position x,y 
+                starting from the top left of the image. 
+                If -pos is not present morse code will be 
+                written at the top left position of the image (0,0)
+        
+    -o          Specifies the output file. If no -o option is mentioned, 
+                output will be printe on the standard output. You will
+                need to write > modimage.bmp to output in modsign.bmp.
+

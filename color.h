@@ -14,14 +14,8 @@ typedef struct {
     unsigned char red;
 } Color;
 
-Color* new_color(
-    unsigned char red, 
-    unsigned char green, 
-    unsigned char blue, 
-    unsigned char alpha_channel
-);
+char* color_to_rgba(Color* color);
 
-void print_color(Color* color);
 
 #endif // __COLOR_H__
 

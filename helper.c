@@ -1,6 +1,6 @@
 #include "helper.h"
 
-char FILENAME[100], TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "stdout", ERROR_BUF[100];
+char FILENAME[100], TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "\0", ERROR_BUFF[100], LOG_BUFF[200];
 
 unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } starting from the top left of the image
 
@@ -10,14 +10,16 @@ Color COLOR_TO_WRITE = BLACK; // default color is black
 
 
 void throw_exception(char* body, short status_code){
-    printf("\033[91m[ERROR] %s\n", body);
-    printf("\033[91mExitting...\n");
+    fprintf(stderr, "\033[91m[ERROR] %s\n", body);
+    fprintf(stderr, "\033[91mExitting...\n");
     exit(status_code);
 }
 
 void get_options(int argc, char *argv[]){
     if(argv[1])
         strcpy(FILENAME, argv[1]);
+    else
+        print_man_page_and_exit();
 
     static struct option longopts[] = {
         { "text", required_argument, NULL, 't' },
@@ -36,6 +38,7 @@ void get_options(int argc, char *argv[]){
                 break;
             case 'd':
                 IS_DATE_SET = true;
+                strcat(TEXT_TO_WRITE, get_linux_date());
                 break;
             case 'p':
                 sscanf(optarg, "%u,%u", &POSITION_TO_WRITE[0], &POSITION_TO_WRITE[1]);
@@ -48,16 +51,16 @@ void get_options(int argc, char *argv[]){
                 COLOR_TO_WRITE.alpha_channel = 0; // We set default value for alpha channel as 0
                 break;
             case ':':
-                sprintf(ERROR_BUF, "Option '%s' has missing argument", argv[optind - 1]);
-                throw_exception(ERROR_BUF, -5);
+                sprintf(ERROR_BUFF, "Option '%s' has missing argument", argv[optind - 1]);
+                throw_exception(ERROR_BUFF, -5);
                 break;
             case '?':
                 if (optopt == 0) 
-                    sprintf(ERROR_BUF, "Unknown option '%s'", argv[optind - 1]);
+                    sprintf(ERROR_BUFF, "Unknown option '%s'", argv[optind - 1]);
                 else 
-                    sprintf(ERROR_BUF, "Error parsing option '%s'", argv[optind - 1]);
+                    sprintf(ERROR_BUFF, "Error parsing option '%s'", argv[optind - 1]);
 
-                throw_exception(ERROR_BUF, -6);
+                throw_exception(ERROR_BUFF, -6);
                 break;
         }
     }
@@ -66,7 +69,7 @@ void get_options(int argc, char *argv[]){
 
 char* get_linux_date(){
     int pipedes[2];
-    char* string_date = (char*) malloc(50);
+    char* string_date = (char*) calloc(50, 1);
 
     if (pipe(pipedes) == -1)
         throw_exception("Pipe error", -10);
@@ -91,4 +94,31 @@ char* get_linux_date(){
         wait(NULL);
     }
     return string_date;
+}
+
+void print_man_page_and_exit(){
+    FILE* man_file;
+    if ( ! (man_file = fopen("man.txt", "r")) )
+        throw_exception("Cannot open man file", ERR_FILE);
+  
+    // Read contents from file 
+    char ch = fgetc(man_file); 
+    while (ch != EOF) { 
+        printf ("%c", ch); 
+        ch = fgetc(man_file); 
+    } 
+  
+    fclose(man_file); 
+    exit(0);
+}
+
+void str_logger(char* str){
+    FILE* log_file;
+    if ( ! (log_file = fopen("log.txt", "a+")) )
+        throw_exception("Cannot write to log file", ERR_FILE);
+    
+    fwrite(str, strlen(str), 1, log_file);
+    fputc('\n', log_file);
+
+    fclose(log_file);
 }

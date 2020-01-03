@@ -13,7 +13,7 @@ typedef struct {
 
 Pixel* new_pixel(unsigned x, unsigned y, Color* color);
 
-void print_pixel(Pixel* pixel);
+char* pixel_to_string(Pixel* pixel);
 
 unsigned get_offset(PBMP bmp_image, unsigned x, unsigned y);
 
