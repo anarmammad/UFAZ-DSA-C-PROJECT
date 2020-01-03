@@ -61,7 +61,7 @@ int main(int argc, char *argv[]){
     fread(data, strlen(morse_txt) * (bmp_image->info_header.bits_per_pixel / 8), 1, bmp_image->file);
     for (int i = 0; morse_txt[i]; i++){
         if(morse_txt[i] == '1'){
-            fwrite(bmp_image->info_header.bits_per_pixel == 32 ? &COLOR_TO_WRITE:(((char*) &COLOR_TO_WRITE)+1) , bmp_image->info_header.bits_per_pixel / 8, 1, mod_file);
+            fwrite(bmp_image->info_header.bits_per_pixel == 32 ? (char*)&COLOR_TO_WRITE:(((char*) &COLOR_TO_WRITE)+1) , bmp_image->info_header.bits_per_pixel / 8, 1, mod_file);
         }
         else{
             fwrite(&data[i * bmp_image->info_header.bits_per_pixel / 8], bmp_image->info_header.bits_per_pixel / 8, 1, mod_file);
