@@ -52,36 +52,25 @@ int main(int argc, char *argv[]){
     FILE* mod_file = fopen(OUTPUT_FILE, "wb+");
     char* morse_txt = str_to_morse(TEXT_TO_WRITE);
     rewind(bmp_image->file);
-    char ch;
-    for (int i = 0, j = 0; i < bmp_image->header.filesize; i++){
-        if( i > offset && morse_txt[j]){
-            Color background_color;
-                fread(&background_color, (bmp_image->info_header.bits_per_pixel / 8), 1, bmp_image->file);
-            if(morse_txt[j] == '1')
-                fwrite(&COLOR_TO_WRITE, (bmp_image->info_header.bits_per_pixel / 8), 1, mod_file);
-            else 
-                fwrite(&background_color, (bmp_image->info_header.bits_per_pixel / 8), 1, mod_file);       
-            j++;
-            i+=3;
+   
+    char* data = (char*) malloc(bmp_image->header.filesize);
+
+    fread(data, offset, 1, bmp_image->file);
+    fwrite(data, offset, 1, mod_file);
+
+    fread(data, strlen(morse_txt) * (bmp_image->info_header.bits_per_pixel / 8), 1, bmp_image->file);
+    for (int i = 0; morse_txt[i]; i++){
+        if(morse_txt[i] == '1'){
+            fwrite(bmp_image->info_header.bits_per_pixel == 32 ? &COLOR_TO_WRITE:(((char*) &COLOR_TO_WRITE)+1) , bmp_image->info_header.bits_per_pixel / 8, 1, mod_file);
         }
         else{
-            ch = fgetc(bmp_image->file);
-            fputc(ch, mod_file);
+            fwrite(&data[i * bmp_image->info_header.bits_per_pixel / 8], bmp_image->info_header.bits_per_pixel / 8, 1, mod_file);
         }
-        
     }
-
-    // for (int i = 0; i < strlen(morse_txt); i++){
-    //     Color background_color;
-    //     fread(&background_color, (bmp_image->info_header.bits_per_pixel / 8), 1, bmp_image->file);
-    //     if(morse_txt[i] == '1')
-    //         fwrite(&COLOR_TO_WRITE, (bmp_image->info_header.bits_per_pixel / 8), 1, mod_file);
-    //     else 
-    //         fwrite(&background_color, (bmp_image->info_header.bits_per_pixel / 8), 1, mod_file);
-    // }
-
-    // while((ch = fgetc(bmp_image->file)) != EOF)
-    //     fputc(ch, mod_file);    
+    
+    
+    fread(data, bmp_image->header.filesize - strlen(morse_txt) * (bmp_image->info_header.bits_per_pixel / 8) - offset, 1, bmp_image->file);
+    fwrite(data, bmp_image->header.filesize - strlen(morse_txt) * (bmp_image->info_header.bits_per_pixel / 8) - offset, 1, mod_file);
 
     fclose(mod_file);
 
