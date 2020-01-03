@@ -14,7 +14,6 @@ typedef int bool;
 #include <sys/wait.h>
 
 #include "color.h"
-#include "pixel.h"
 
 #define ERR_FILE -1
 #define ERR_FORMAT -2

@@ -7,26 +7,27 @@
 #include "helper.h"
 
 typedef struct __attribute__((__packed__)) {
-    struct __attribute__((__packed__)) {
-        char Signature[2];
-        int FileSize;
+    struct __attribute__((__packed__)) { // 14 bytes
+        char signature[2];
+        int filesize;
         int reserved;
-        int DataOffset;
-    } Header;
+        int image_starts_at;
+    } header;
 
-    struct {
-        int Size;
-        int Width;
-        int Height;
-        short Planes;
-        short Bits;
-        int Compression;
-        int ImageSize;
-        int XpixelsPerM;
-        int YpixelsPerM;
-        int ColorsUsed;
-        int ImportantColors;
-    } InfoHeader;
+    struct { // 40 bytes
+        int header_size;
+        int image_width;
+        int image_height;
+        short n_color_planes;
+        short bits_per_pixel;
+        /* not important */
+        int compression;
+        int image_size;
+        int x_pixel_per_m;
+        int y_pixel_per_m;
+        int colors_used;
+        int important_colors;
+    } info_header;
 
     FILE* file;
 

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "color.h"
+#include "bmp.h"
 
 typedef struct {
     unsigned x;
@@ -13,5 +14,7 @@ typedef struct {
 Pixel* new_pixel(unsigned x, unsigned y, Color* color);
 
 void print_pixel(Pixel* pixel);
+
+unsigned get_offset(PBMP bmp_image, unsigned x, unsigned y);
 
 #endif // __PIXEL_H__

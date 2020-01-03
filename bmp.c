@@ -10,17 +10,17 @@ PBMP open_bmp(char* filename){
         throw_exception(ERROR_BUF, -5);
     }
 
-    if(!fgets((char*)image, sizeof(BMP), image->file)){
+    if(!fgets((char*)image, sizeof(BMP) - sizeof(image->file), image->file)){
         throw_exception("Fgets Error\n", ERR_UNKNOWN);
     }
 
-    if(strncmp(image->Header.Signature, "BM", 2))
+    if(strncmp(image->header.signature, "BM", 2))
         throw_exception("Format mismatch!\n", ERR_FORMAT);
 
-    if(!image->Header.FileSize)
+    if(!image->header.filesize)
         throw_exception("File Size is not valid!\n", ERR_FILE);
 
-    if(!image->Header.DataOffset || image->Header.DataOffset >= image->Header.FileSize)
+    if(!image->header.image_starts_at || image->header.image_starts_at >= image->header.filesize)
         throw_exception("Data Offset mismatch\n", ERR_FILE);
 
     return image;
