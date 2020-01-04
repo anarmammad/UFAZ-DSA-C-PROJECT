@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "helper.h"
+
 char* morse_encode_char(char ch);
 char* str_to_morse(char* str);
 

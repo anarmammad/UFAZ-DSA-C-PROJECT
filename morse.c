@@ -93,6 +93,8 @@ char* morse_encode_char(char ch) {
             return "1011101011101"; // • − • − •
         case '=':
             return "1110101010111"; // − • • • −
+        default:
+            throw_exception("Character cannot be encoded!", ERR_UNKNOWN);
     } 
     return "00000"; // space 
 } 
