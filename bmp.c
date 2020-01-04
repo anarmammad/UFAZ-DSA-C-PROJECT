@@ -52,11 +52,12 @@ char* watermark_bmp(PBMP image_old){
         }
         else{
             // fwrite(&data[i * bytes_per_pixel], bytes_per_pixel, 1, mod_file);
-            if( offset + i * bytes_per_pixel < image_old->header.filesize ){
-                memcpy(mod_data + offset + i * bytes_per_pixel, &data[i * bytes_per_pixel], bytes_per_pixel);
-            }
+            memcpy(mod_data + offset + i * bytes_per_pixel, &data[i * bytes_per_pixel], bytes_per_pixel);
             if(x >= image_old->info_header.image_width && morse_txt[i] == '1'){
-                memcpy(mod_data + offset + i* bytes_per_pixel - image_old->info_header.image_width * bytes_per_pixel * (x / image_old->info_header.image_width * 2), image_old->info_header.bits_per_pixel == 32 ? (char*) &COLOR_TO_WRITE : (((char*) &COLOR_TO_WRITE) + 1), bytes_per_pixel);
+                if(POSITION_TO_WRITE[1] + (x / image_old->info_header.image_width + 1) <= image_old->info_header.image_height ){
+                    char* from = image_old->info_header.bits_per_pixel == 32 ? (char*) &COLOR_TO_WRITE : (((char*) &COLOR_TO_WRITE) + 1);
+                    memcpy(mod_data + offset + i * bytes_per_pixel - image_old->info_header.image_width * bytes_per_pixel * (x / image_old->info_header.image_width * 2), from, bytes_per_pixel);
+                }
             }
         }
     }

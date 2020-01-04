@@ -11,6 +11,11 @@
 
 int main(int argc, char *argv[]){
     get_options(argc, argv);
+    /* logging */
+    str_logger(get_linux_date());
+    PBMP bmp_image = open_bmp(FILENAME);
+    char* morse_txt = watermark_bmp(bmp_image);
+
 
     sprintf(LOG_BUFF, "OPTIONS:\n"
         "\tFile name: %s\n"
@@ -28,7 +33,6 @@ int main(int argc, char *argv[]){
 
     str_logger(LOG_BUFF); 
 
-    PBMP bmp_image = open_bmp(FILENAME);
 
     sprintf(LOG_BUFF, "BMP:\n"
            "\tSize of the file: %d bytes\n"
@@ -48,7 +52,6 @@ int main(int argc, char *argv[]){
 
     str_logger(LOG_BUFF); 
 
-    char* morse_txt = watermark_bmp(bmp_image);
 
     sprintf(LOG_BUFF, "WATERMARK:\n"
         "\tPosition offset: %u bytes\n"
@@ -58,6 +61,7 @@ int main(int argc, char *argv[]){
     str_logger(LOG_BUFF);
 
     str_logger("******************************************\n");
+
     close_bmp(bmp_image);
     return 0;
 }

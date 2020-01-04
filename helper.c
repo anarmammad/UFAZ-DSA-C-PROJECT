@@ -1,6 +1,6 @@
 #include "helper.h"
 
-char FILENAME[100] = "", TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "\0", ERROR_BUFF[100], LOG_BUFF[200];
+char FILENAME[100] = {0}, TEXT_TO_WRITE[100] = {0},  OUTPUT_FILE[100] = {0}, ERROR_BUFF[100] = {0}, LOG_BUFF[600] = {0};
 
 unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } starting from the top left of the image
 
@@ -33,12 +33,10 @@ void get_options(int argc, char *argv[]){
     while ((ch = getopt_long_only(argc, argv, ":td:p:o:", longopts, NULL)) != -1) {
         switch (ch) {
             case 't':
-                for(int i = 0; optarg[i]; i++)
-                    TEXT_TO_WRITE[i] = tolower(optarg[i]);
+                strcpy(TEXT_TO_WRITE, optarg);
                 break;
             case 'd':
                 IS_DATE_SET = true;
-                strcat(TEXT_TO_WRITE, get_linux_date());
                 break;
             case 'p':
                 sscanf(optarg, "%u,%u", &POSITION_TO_WRITE[0], &POSITION_TO_WRITE[1]);
@@ -47,7 +45,7 @@ void get_options(int argc, char *argv[]){
                 strcpy(OUTPUT_FILE, optarg);
                 break;
             case 'c':
-                sscanf(optarg, "%2hhx%2hhx%2hhx", &COLOR_TO_WRITE.red, &COLOR_TO_WRITE.green, &COLOR_TO_WRITE.blue);
+                sscanf(optarg, "%2hhx%2hhx%2hhx%2hhx", &COLOR_TO_WRITE.red, &COLOR_TO_WRITE.green, &COLOR_TO_WRITE.blue, &COLOR_TO_WRITE.alpha_channel);
                 COLOR_TO_WRITE.alpha_channel = 0; // We set default value for alpha channel as 0
                 break;
             case ':':
@@ -64,6 +62,12 @@ void get_options(int argc, char *argv[]){
                 break;
         }
     }
+    if (IS_DATE_SET)
+        strcat(TEXT_TO_WRITE, get_linux_date());
+    
+    for (int i = 0; i < strlen(TEXT_TO_WRITE); i++)
+        TEXT_TO_WRITE[i] = tolower(TEXT_TO_WRITE[i]);
+
 }
 
 

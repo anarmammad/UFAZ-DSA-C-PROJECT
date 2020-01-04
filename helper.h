@@ -20,7 +20,7 @@ typedef int bool;
 #define ERR_SIZE -3
 #define ERR_UNKNOWN -4
 
-extern char FILENAME[100], TEXT_TO_WRITE[100],  OUTPUT_FILE[100], ERROR_BUFF[100], LOG_BUFF[200];
+extern char FILENAME[100], TEXT_TO_WRITE[100],  OUTPUT_FILE[100], ERROR_BUFF[100], LOG_BUFF[600];
 
 extern unsigned POSITION_TO_WRITE[2];
 
