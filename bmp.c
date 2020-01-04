@@ -31,30 +31,41 @@ PBMP open_bmp(char* filename){
 /* function that watermarks the bmp image and returns the morse code */
 char* watermark_bmp(PBMP image_old){
     unsigned offset = get_offset(image_old, POSITION_TO_WRITE[0], POSITION_TO_WRITE[1]); 
+    int bytes_per_pixel = image_old->info_header.bits_per_pixel / 8;
 
-    FILE* mod_file = OUTPUT_FILE[0] != '\0' ? fopen(OUTPUT_FILE, "wb+"):stdout;
     char* morse_txt = str_to_morse(TEXT_TO_WRITE);
     rewind(image_old->file);
    
     char* data = (char*) calloc(image_old->header.filesize, 1);
+    char* mod_data = (char*) calloc(image_old->header.filesize, 2);
 
     fread(data, offset, 1, image_old->file);
-    fwrite(data, offset, 1, mod_file);
+    // fwrite(data, offset, 1, mod_file);
+    memcpy(mod_data, data, offset);
 
-    fread(data, strlen(morse_txt) * (image_old->info_header.bits_per_pixel / 8), 1, image_old->file);
-    for (int i = 0; morse_txt[i]; i++){
-        if(morse_txt[i] == '1'){
-            fwrite(image_old->info_header.bits_per_pixel == 32 ? (char*)&COLOR_TO_WRITE : (((char*) &COLOR_TO_WRITE)+1) , image_old->info_header.bits_per_pixel / 8, 1, mod_file);
+    unsigned x = POSITION_TO_WRITE[0];
+    fread(data, strlen(morse_txt) * (bytes_per_pixel), 1, image_old->file);
+    for (int i = 0; morse_txt[i]; i++, x++){
+        if(morse_txt[i] == '1' /* && x < image_old->info_header.image_width */){
+            // fwrite(image_old->info_header.bits_per_pixel == 32 ? (char*)&COLOR_TO_WRITE : (((char*) &COLOR_TO_WRITE)+1) , bytes_per_pixel, 1, mod_file);
+            memcpy(mod_data + offset + i*bytes_per_pixel, image_old->info_header.bits_per_pixel == 32 ? (char*)&COLOR_TO_WRITE : (((char*) &COLOR_TO_WRITE)+1), bytes_per_pixel);
         }
         else{
-            fwrite(&data[i * image_old->info_header.bits_per_pixel / 8], image_old->info_header.bits_per_pixel / 8, 1, mod_file);
+            // fwrite(&data[i * bytes_per_pixel], bytes_per_pixel, 1, mod_file);
+            memcpy(mod_data + offset + i*bytes_per_pixel, &data[i * bytes_per_pixel], bytes_per_pixel);
+            if(x >= image_old->info_header.image_width){
+                /*  */
+            }
         }
     }
     
     
-    fread(data, image_old->header.filesize - strlen(morse_txt) * (image_old->info_header.bits_per_pixel / 8) - offset, 1, image_old->file);
-    fwrite(data, image_old->header.filesize - strlen(morse_txt) * (image_old->info_header.bits_per_pixel / 8) - offset, 1, mod_file);
+    fread(data, image_old->header.filesize - strlen(morse_txt) * (bytes_per_pixel) - offset, 1, image_old->file);
+    // fwrite(data, image_old->header.filesize - strlen(morse_txt) * (bytes_per_pixel) - offset, 1, mod_file);
+    memcpy(mod_data + offset + strlen(morse_txt)*bytes_per_pixel, data, image_old->header.filesize - strlen(morse_txt) * (bytes_per_pixel) - offset);
 
+    FILE* mod_file = OUTPUT_FILE[0] != '\0' ? fopen(OUTPUT_FILE, "wb+"):stdout;
+    fwrite(mod_data, image_old->header.filesize, 1, mod_file);
     fclose(mod_file);
     return morse_txt;
 }
