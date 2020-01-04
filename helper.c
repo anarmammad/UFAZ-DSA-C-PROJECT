@@ -1,6 +1,6 @@
 #include "helper.h"
 
-char FILENAME[100], TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "\0", ERROR_BUFF[100], LOG_BUFF[200];
+char FILENAME[100] = "", TEXT_TO_WRITE[100] = "",  OUTPUT_FILE[100] = "\0", ERROR_BUFF[100], LOG_BUFF[200];
 
 unsigned POSITION_TO_WRITE[2] = { 0, 0 }; // position expressed as: { x, y } starting from the top left of the image
 
